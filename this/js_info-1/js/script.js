@@ -112,14 +112,10 @@ window.addEventListener('DOMContentLoaded', function() {
 
 	descr_btn.forEach(function(item, i, arr) {
 		descr_btn[i].addEventListener('click', function() {
-			this.btn = descr_btn[i];
-			this.overlay = overlay;
-			this.body = document.body;
-
-			this.overlay.style.display = 'block';
-			this.btn.toggleClass('.more-splash');
-			this.body.style.overflow = 'hidden';
+			function showModal() {
+				overlay.style.display = 'block';
+			}
+			showModal();
 		});
 	});
-
 });
