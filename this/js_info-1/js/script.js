@@ -98,10 +98,14 @@ window.addEventListener('DOMContentLoaded', function() {
 		overlay = document.querySelector('.overlay'),
 		close = document.querySelector('.popup-close');
 
-	more.addEventListener('click', function() {
+	function showModal() {
 		overlay.style.display = 'block';
 		this.classList.add('more-splash');
 		document.body.style.overflow = 'hidden';
+	}
+
+	more.addEventListener('click', function() {
+		showModal();
 	});
 
 	close.addEventListener('click', function() {
@@ -111,10 +115,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	});
 
 	descr_btn.forEach(function(item, i, arr) {
-		descr_btn[i].addEventListener('click', function() {
-			function showModal() {
-				overlay.style.display = 'block';
-			}
+		item.addEventListener('click', function() {
 			showModal();
 		});
 	});
