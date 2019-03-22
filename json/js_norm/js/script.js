@@ -100,7 +100,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	let showModal = () => {
 		overlay.style.display = 'block';
-		this.classList.add('.more-splash');
+		overlay.classList.add('.more-splash');
 		document.body.style.overflow = 'hidden';
 	}
 
@@ -128,14 +128,70 @@ window.addEventListener('DOMContentLoaded', () => {
 		failure: 'Smth got wrong' 
 	}
 
-	let form = document.querySelector('.main-form'),
+	let formOverlay = document.querySelector('.main-form'),
+		formContact = document.querySelector('.contact-form'),
 		input = document.getElementsByTagName('input'),
 		statusMessage = document.createElement('div');
 
 	statusMessage.classList.add('status');
 
 
-	form.addEventListener('submit', function(event) {
+	formOverlay.addEventListener('submit', function(event) {
+		event.preventDefault();
+		form.appendChild(statusMessage);
+
+		let request = new XMLHttpRequest();
+
+		request.open('POST', 'server.php');
+		request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+		let formData = new FormData(form);
+
+		let obj = {};
+
+		formData.forEach(function(value, key) {
+			obj[key] = value;
+		});
+
+		let json = JSON.stringify(obj);
+
+		request.send(json);
+
+		request.addEventListener('readystatechange', function() {
+			if (request.readyState < 4) {
+				statusMessage.innerHTML = message.loading;
+
+			} else if (request.readyState == 4 && request.status == 200) {
+				statusMessage.innerHTML = message.success;
+			} else {
+				statusMessage.innerHTML = message.failure;
+				console.log(request.readyState);
+				console.log(request.state);
+			}
+		});
+
+		for (let i = 0; i < input.length; i++) {
+			input[i].value = '';
+		}
+	});
+
+	let modalInput = document.querySelector('.popup-form__input');
+
+	console.log(modalInput);
+
+	modalInput.addEventListener('input', function() {
+		let firstDigit = modalInput.value.charCodeAt(0);
+		if (firstDigit > 57 || firstDigit < 42) {
+			modalInput.value = '';
+		}
+		let secondDigit = modalInput.value.charCodeAt(1); 
+		if (secondDigit > 57 || secondDigit < 48) {
+			modalInput.value = '+';
+		}
+		console.log(firstDigit); 
+	});
+
+	formContactaddEventListener('submit', function(event) {
 		event.preventDefault();
 		form.appendChild(statusMessage);
 
