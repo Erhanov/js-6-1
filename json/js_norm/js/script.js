@@ -100,7 +100,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	let showModal = () => {
 		overlay.style.display = 'block';
-		overlay.classList.add('.more-splash');
+		this.classList.add('.more-splash');
 		document.body.style.overflow = 'hidden';
 	}
 
@@ -128,15 +128,14 @@ window.addEventListener('DOMContentLoaded', () => {
 		failure: 'Smth got wrong' 
 	}
 
-	let formOverlay = document.querySelector('.main-form'),
-		formContact = document.querySelector('.contact-form'),
+	let form = document.querySelector('.main-form'),
 		input = document.getElementsByTagName('input'),
 		statusMessage = document.createElement('div');
 
 	statusMessage.classList.add('status');
 
 
-	formOverlay.addEventListener('submit', function(event) {
+	form.addEventListener('submit', function(event) {
 		event.preventDefault();
 		form.appendChild(statusMessage);
 
@@ -191,24 +190,26 @@ window.addEventListener('DOMContentLoaded', () => {
 		console.log(firstDigit); 
 	});
 
-	formContactaddEventListener('submit', function(event) {
+	let contactForm = document.querySelector('.formContact');
+
+	contactForm.addEventListener('submit', function(event) {
 		event.preventDefault();
-		form.appendChild(statusMessage);
+		contactForm.appendChild(statusMessage);
 
 		let request = new XMLHttpRequest();
 
 		request.open('POST', 'server.php');
 		request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
-		let formData = new FormData(form);
+		let formData = new FormData(contactForm);
 
-		let obj = {};
+		let object = {};
 
 		formData.forEach(function(value, key) {
-			obj[key] = value;
+			object[key] = value;
 		});
 
-		let json = JSON.stringify(obj);
+		let json = JSON.stringify(object);
 
 		request.send(json);
 
@@ -230,20 +231,19 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 
-	let modalInput = document.querySelector('.popup-form__input');
+	let contactInput = document.querySelector('.contact-input');
 
-	console.log(modalInput);
+	console.log(contactInput);
 
-	modalInput.addEventListener('input', function() {
-		let firstDigit = modalInput.value.charCodeAt(0);
+	contactInput.addEventListener('input', function() {
+		let firstDigit = contactInput.value.charCodeAt(0);
 		if (firstDigit > 57 || firstDigit < 42) {
-			modalInput.value = '';
+			contactInput.value = '';
 		}
-		let secondDigit = modalInput.value.charCodeAt(1); 
+		let secondDigit = contactInput.value.charCodeAt(1); 
 		if (secondDigit > 57 || secondDigit < 48) {
-			modalInput.value = '+';
+			contactInput.value = '+';
 		}
 		console.log(firstDigit); 
 	});
-
 });
