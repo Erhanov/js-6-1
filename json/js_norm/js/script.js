@@ -100,7 +100,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	let showModal = () => {
 		overlay.style.display = 'block';
-		this.classList.add('.more-splash');
+		overlay.classList.add('.more-splash');
 		document.body.style.overflow = 'hidden';
 	}
 
