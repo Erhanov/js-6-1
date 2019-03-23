@@ -176,11 +176,23 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 
+	let inputControl = (input) => {
+		let firstDigit = input.value.charCodeAt(0);
+		if (firstDigit > 57 || firstDigit < 42) {
+			input.value = '';
+		}
+		let secondDigit = input.value.charCodeAt(1); 
+		if (secondDigit > 57 || secondDigit < 48) {
+			input.value = '+';
+		}
+		console.log(firstDigit);
+	}
+
 	form.addEventListener('submit', function(event) {
 		SendForm(event).then(() => statusMessage.innerHTML = message.loading)
 						.then(() => statusMessage.innerHTML = message.success)
 						.catch(() => statusMessage.innerHTML = message.failure)
-		clearInput();
+						.then(clearInput());
 	});
 
 	let modalInput = document.querySelector('.popup-form__input');
@@ -188,15 +200,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	console.log(modalInput);
 
 	modalInput.addEventListener('input', function() {
-		let firstDigit = modalInput.value.charCodeAt(0);
-		if (firstDigit > 57 || firstDigit < 42) {
-			modalInput.value = '';
-		}
-		let secondDigit = modalInput.value.charCodeAt(1); 
-		if (secondDigit > 57 || secondDigit < 48) {
-			modalInput.value = '+';
-		}
-		console.log(firstDigit); 
+		inputControl(modalInput); 
 	});
 
 	let contactForm = document.querySelector('.formContact');
@@ -205,7 +209,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		SendForm(event).then(() => statusMessage.innerHTML = message.loading)
 						.then(() => statusMessage.innerHTML = message.success)
 						.catch(() => statusMessage.innerHTML = message.failure)
-		clearInput();
+						.then(clearInput());
 	});
 
 	let contactInput = document.querySelector('.contact-input');
@@ -213,15 +217,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	console.log(contactInput);
 
 	contactInput.addEventListener('input', function() {
-		let firstDigit = contactInput.value.charCodeAt(0);
-		if (firstDigit > 57 || firstDigit < 42) {
-			contactInput.value = '';
-		}
-		let secondDigit = contactInput.value.charCodeAt(1); 
-		if (secondDigit > 57 || secondDigit < 48) {
-			contactInput.value = '+';
-		}
-		console.log(firstDigit); 
+		inputControl(contactInput); 
 	});
 
 
