@@ -134,7 +134,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	statusMessage.classList.add('status');
 
-	let SendForm = (event) => {
+	let SendForm = (event, form) => {
 		event.preventDefault();
 		form.appendChild(statusMessage);
 
@@ -189,7 +189,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 	form.addEventListener('submit', function(event) {
-		SendForm(event).then(() => statusMessage.innerHTML = message.loading)
+		SendForm(event, form).then(() => statusMessage.innerHTML = message.loading)
 						.then(() => statusMessage.innerHTML = message.success)
 						.catch(() => statusMessage.innerHTML = message.failure)
 						.then(clearInput());
@@ -206,7 +206,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	let contactForm = document.querySelector('.formContact');
 
 	contactForm.addEventListener('submit', function(event) {
-		SendForm(event).then(() => statusMessage.innerHTML = message.loading)
+		SendForm(event, contactForm).then(() => statusMessage.innerHTML = message.loading)
 						.then(() => statusMessage.innerHTML = message.success)
 						.catch(() => statusMessage.innerHTML = message.failure)
 						.then(clearInput());
