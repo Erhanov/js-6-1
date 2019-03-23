@@ -29,7 +29,5 @@ function loose() {
 	console.log('U lose');
 }
 
-shoot({})
-		.then(mark => console.log('Вы попали в цель!'))
-		.then(win)
+shoot({}).then(mark => console.log('Вы попали в цель!')).then(win)
 		.catch(loose);
