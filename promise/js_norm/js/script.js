@@ -100,7 +100,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	let showModal = () => {
 		overlay.style.display = 'block';
-		this.classList.add('.more-splash');
+		overlay.classList.add('.more-splash');
 		document.body.style.overflow = 'hidden';
 	}
 
@@ -134,8 +134,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	statusMessage.classList.add('status');
 
-
-	form.addEventListener('submit', function(event) {
+	let SendForm = (event) => {
 		event.preventDefault();
 		form.appendChild(statusMessage);
 
@@ -156,22 +155,32 @@ window.addEventListener('DOMContentLoaded', () => {
 
 		request.send(json);
 
-		request.addEventListener('readystatechange', function() {
-			if (request.readyState < 4) {
-				statusMessage.innerHTML = message.loading;
-
-			} else if (request.readyState == 4 && request.status == 200) {
-				statusMessage.innerHTML = message.success;
-			} else {
-				statusMessage.innerHTML = message.failure;
-				console.log(request.readyState);
-				console.log(request.state);
-			}
+		let promise = new Promise(function(resolve, reject) {
+			request.addEventListener('readystatechange', function() {
+				if (request.readyState < 4) {
+					resolve();
+				} else if (request.readyState == 4 && request.status == 200) {
+					resolve()
+				} else {
+					reject();
+				}
+			});
 		});
 
+		return promise;
+	}
+
+	let clearInput = () => {
 		for (let i = 0; i < input.length; i++) {
 			input[i].value = '';
 		}
+	}
+
+	form.addEventListener('submit', function(event) {
+		SendForm(event).then(() => statusMessage.innerHTML = message.loading)
+						.then(() => statusMessage.innerHTML = message.success)
+						.catch(() => statusMessage.innerHTML = message.failure)
+		clearInput();
 	});
 
 	let modalInput = document.querySelector('.popup-form__input');
@@ -189,5 +198,31 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 		console.log(firstDigit); 
 	});
+
+	let contactForm = document.querySelector('.formContact');
+
+	contactForm.addEventListener('submit', function(event) {
+		SendForm(event).then(() => statusMessage.innerHTML = message.loading)
+						.then(() => statusMessage.innerHTML = message.success)
+						.catch(() => statusMessage.innerHTML = message.failure)
+		clearInput();
+	});
+
+	let contactInput = document.querySelector('.contact-input');
+
+	console.log(contactInput);
+
+	contactInput.addEventListener('input', function() {
+		let firstDigit = contactInput.value.charCodeAt(0);
+		if (firstDigit > 57 || firstDigit < 42) {
+			contactInput.value = '';
+		}
+		let secondDigit = contactInput.value.charCodeAt(1); 
+		if (secondDigit > 57 || secondDigit < 48) {
+			contactInput.value = '+';
+		}
+		console.log(firstDigit); 
+	});
+
 
 });

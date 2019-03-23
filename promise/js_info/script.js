@@ -3,7 +3,7 @@ let drink = 0;
 function shoot(arrow, headshot, fail) {
 	console.log('Вы сделали выстрел! ...');
 
-
+	
 	setTimeout(function() {
 		Math.random() > .5 ? headshot({}) : fail('Вы промахнулись');
 	}, 3000);
