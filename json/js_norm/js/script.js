@@ -130,23 +130,22 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	let form = document.querySelector('.main-form'),
 		input = document.getElementsByTagName('input'),
-		statusMessage = document.createElement('div');
+		statusMessage = document.createElement('div'),
+		contactForm = document.querySelector('.formContact');
 
 	statusMessage.classList.add('status');
 
-
-	form.addEventListener('submit', function(event) {
+	let SendForm = (event, form_ex) => {
 		event.preventDefault();
-		form.appendChild(statusMessage);
+		form_ex.appendChild(statusMessage);
 
 		let request = new XMLHttpRequest();
 
 		request.open('POST', 'server.php');
 		request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
-		let formData = new FormData(form);
-
-		let obj = {};
+		let formData = new FormData(form_ex),
+			obj = {};
 
 		formData.forEach(function(value, key) {
 			obj[key] = value;
@@ -156,94 +155,64 @@ window.addEventListener('DOMContentLoaded', () => {
 
 		request.send(json);
 
-		request.addEventListener('readystatechange', function() {
-			if (request.readyState < 4) {
-				statusMessage.innerHTML = message.loading;
-
-			} else if (request.readyState == 4 && request.status == 200) {
-				statusMessage.innerHTML = message.success;
-			} else {
-				statusMessage.innerHTML = message.failure;
-				console.log(request.readyState);
-				console.log(request.state);
-			}
+		let promise = new Promise(function(resolve, reject) {
+			request.addEventListener('readystatechange', function() {
+				if (request.readyState < 4) {
+					resolve();
+				} else if (request.readyState == 4 && request.status == 200) {
+					resolve()
+				} else {
+					reject();
+				}
+			});
 		});
 
+		return promise;
+	}
+
+	let clearInput = () => {
 		for (let i = 0; i < input.length; i++) {
 			input[i].value = '';
 		}
+	}
+
+	let inputControl = (input) => {
+		let firstDigit = input.value.charCodeAt(0);
+		if (firstDigit > 57 || firstDigit < 42) {
+			input.value = '';
+		}
+		let secondDigit = input.value.charCodeAt(1); 
+		if (secondDigit > 57 || secondDigit < 48) {
+			input.value = '+';
+		}
+		console.log(firstDigit);
+	}
+
+	let sendInfo = (form) => {
+		SendForm(event, form).then(() => statusMessage.innerHTML = message.loading)
+						.then(() => statusMessage.innerHTML = message.success)
+						.catch(() => statusMessage.innerHTML = message.failure)
+						.then(clearInput());
+	}
+
+	form.addEventListener('submit', function(event) {
+		sendInfo(form);
 	});
 
-	let modalInput = document.querySelector('.popup-form__input');
-
-	console.log(modalInput);
+	let modalInput = document.querySelector('.popup-form__input'),
+		contactInput = document.querySelector('.contact-input');
 
 	modalInput.addEventListener('input', function() {
-		let firstDigit = modalInput.value.charCodeAt(0);
-		if (firstDigit > 57 || firstDigit < 42) {
-			modalInput.value = '';
-		}
-		let secondDigit = modalInput.value.charCodeAt(1); 
-		if (secondDigit > 57 || secondDigit < 48) {
-			modalInput.value = '+';
-		}
-		console.log(firstDigit); 
+		inputControl(modalInput); 
 	});
-
-	let contactForm = document.querySelector('.formContact');
 
 	contactForm.addEventListener('submit', function(event) {
-		event.preventDefault();
-		contactForm.appendChild(statusMessage);
-
-		let request = new XMLHttpRequest();
-
-		request.open('POST', 'server.php');
-		request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-
-		let formData = new FormData(contactForm);
-
-		let object = {};
-
-		formData.forEach(function(value, key) {
-			object[key] = value;
-		});
-
-		let json = JSON.stringify(object);
-
-		request.send(json);
-
-		request.addEventListener('readystatechange', function() {
-			if (request.readyState < 4) {
-				statusMessage.innerHTML = message.loading;
-
-			} else if (request.readyState == 4 && request.status == 200) {
-				statusMessage.innerHTML = message.success;
-			} else {
-				statusMessage.innerHTML = message.failure;
-				console.log(request.readyState);
-				console.log(request.state);
-			}
-		});
-
-		for (let i = 0; i < input.length; i++) {
-			input[i].value = '';
-		}
+		sendInfo(contactForm);
 	});
-
-	let contactInput = document.querySelector('.contact-input');
-
-	console.log(contactInput);
 
 	contactInput.addEventListener('input', function() {
-		let firstDigit = contactInput.value.charCodeAt(0);
-		if (firstDigit > 57 || firstDigit < 42) {
-			contactInput.value = '';
-		}
-		let secondDigit = contactInput.value.charCodeAt(1); 
-		if (secondDigit > 57 || secondDigit < 48) {
-			contactInput.value = '+';
-		}
-		console.log(firstDigit); 
+		inputControl(contactInput); 
 	});
+
+
 });
