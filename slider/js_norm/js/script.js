@@ -285,8 +285,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	persons.addEventListener('input', function() {
 		console.log(persons.value.charCodeAt(0));
-		if (isNaN(restDays.value.charCodeAt(0))) {
-			restDays.value = '';
+		if (isNaN(persons.value.charCodeAt(0))) {
+			persons.value = '';
 		}
 	});
 
